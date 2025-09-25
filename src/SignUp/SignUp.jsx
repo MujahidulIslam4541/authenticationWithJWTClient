@@ -1,6 +1,10 @@
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const handleSubmit = event => {
         event.preventDefault();
         const form = event.target;
@@ -28,8 +32,30 @@ const SignUp = () => {
                             <input className="input input-border border border-white rounded px-4 py-1" type="text" name="lastName" placeholder="Enter Your last Name" />
                             <input className="input input-border border border-white rounded px-4 py-1" type="email" name="email" placeholder="Enter Your email Address" />
                             <input className="input input-border border border-white rounded px-4 py-1" type="number" name="number" placeholder="Enter Your number" />
-                            <input className="input input-border border border-white rounded px-4 py-1" type="text" name="password" placeholder="Enter Your password" />
-                            <input className="input input-border border border-white rounded px-4 py-1" type="text" name="passwords" placeholder="Confirm Your password" />
+                            
+                            <div className="relative w-full">
+                                <input
+                                    className="input input-border border border-white rounded px-4 py-1 w-full"
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Enter Your password"
+                                />
+
+                                {/* Icon */}
+                                <span
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+                            
+                            <div className="relative w-full">
+                                <input className="input input-border border border-white rounded px-4 py-1 w-full" type={showConfirmPassword ? "text" : "password"} name="passwords" placeholder="Confirm Your password" />
+                                <span className="absolute right-3  top-1/2 -translate-y-1/2 cursor-pointer text-gray-500" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
 
                             <div className="text-left flex gap-2">
                                 <input type="checkbox" /><span>Agree to the terms and conditions</span>
