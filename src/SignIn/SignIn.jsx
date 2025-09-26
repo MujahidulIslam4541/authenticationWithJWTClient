@@ -1,17 +1,42 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
-    const handleSignIn = event => {
+    const [checked, setChecked] = useState(false)
+
+    const handleSignIn = async (event) => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        const checkbox = form.checkbox.value;
-        console.log(email, password, checkbox);
-        form.reset();
+        const userData = { email, password }
+
+        if (!checked) {
+            return toast.error("You must agree to the terms and conditions!")
+        }
+        try {
+            const res = await fetch("http://localhost:3000/signIn", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            })
+            const data = await res.json();
+            // handle response
+            if (res.ok) {
+                toast.success("User login successfully 🎉");
+                form.reset();
+                setChecked(false);
+            } else {
+               return toast.error(data.message || "Failed to login");
+            }
+        } catch (error) {
+          return toast.error("Server Not Found", error)
+        }
+        console.log(userData);
+
     }
     return (
         <div className="w-[400px]  mx-auto shadow-lg shadow-red-800/30  bg-black  text-white  justify-center items-center  rounded-2xl pb-6">
@@ -34,7 +59,7 @@ const SignIn = () => {
 
                 <div className='flex justify-between items-center text-sm text-gray-300'>
                     <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="checkbox" id="" className='mr-2' />
+                        <input type="checkbox" checked={checked} name="checkbox" id="" onChange={() => setChecked(!checked)} className='mr-2' />
                         <span>Remember Me</span>
                     </label>
                     <button type="button" className="text-red-500 hover:underline">
