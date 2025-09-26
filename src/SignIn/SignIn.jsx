@@ -23,19 +23,21 @@ const SignIn = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData)
             })
-            const data = await res.json();
+            const result = await res.json();
+            console.log(result.data.token)
             // handle response
             if (res.ok) {
                 toast.success("User login successfully 🎉");
                 form.reset();
                 setChecked(false);
+                localStorage.setItem('token',result.data.token)
             } else {
-               return toast.error(data.message || "Failed to login");
+               return toast.error(result.data.message || "Failed to login");
             }
         } catch (error) {
           return toast.error("Server Not Found", error)
         }
-        console.log(userData);
+        // console.log(userData);
 
     }
     return (
