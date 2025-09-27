@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [checked, setChecked] = useState(false)
+    const [loginSuccess, setLoginSuccess] = useState(false)
 
     const handleSignIn = async (event) => {
         event.preventDefault();
@@ -30,12 +31,16 @@ const SignIn = () => {
                 toast.success("User login successfully 🎉");
                 form.reset();
                 setChecked(false);
-                localStorage.setItem('token',result.data.token)
+                localStorage.setItem('token', result.data.token)
+                setLoginSuccess(true)
             } else {
-               return toast.error(result.data.message || "Failed to login");
+                setLoginSuccess(false)
+                return toast.error(result.data.message || "Failed to login");
+
             }
         } catch (error) {
-          return toast.error("Server Not Found", error)
+            setLoginSuccess(false)
+            return toast.error("Server Not Found", error)
         }
         // console.log(userData);
 
@@ -73,6 +78,7 @@ const SignIn = () => {
                 </div>
             </form>
             <p className='px-6 text-sm text-center mt-4'>New user? <Link to='/' className='text-red-500'>SignUp</Link></p>
+            {loginSuccess ? <p className='px-6 text-sm text-center mt-4'> <Link to='/profile' className='text-green-500'>Go to your Profile</Link></p> : ''}
         </div>
     )
 }

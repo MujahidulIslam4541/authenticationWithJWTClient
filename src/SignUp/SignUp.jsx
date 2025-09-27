@@ -1,12 +1,13 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [agree, setAgree] = useState(false)
+    const navigation=useNavigate()
 
     // form submit handler
     const handleSubmit = async (event) => {
@@ -47,6 +48,7 @@ const SignUp = () => {
                 toast.success("User registered successfully 🎉");
                 form.reset();
                 setAgree(false);
+                navigation('/signIn')
             } else {
                 toast.error(data.message || "Failed to register");
             }
